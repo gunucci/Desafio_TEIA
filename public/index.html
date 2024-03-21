@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de API</title>
+</head>
+<body>
+    <h1>Teste de API</h1>
+    <form id="apiTestForm">
+        <label for="textoInput">Texto:</label>
+        <input type="text" id="textoInput" name="textoInput" required>
+        <button type="submit">Enviar</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('apiTestForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const texto = document.getElementById('textoInput').value;
+
+            try {
+                const response = await fetch('/api/manipulacao-string', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ texto })
+                });
+
+                const data = await response.json();
+
+                // Exibir o resultado na página
+                document.getElementById('result').innerHTML = `
+                    <p>Palíndromo: ${data.palindromo}</p>
+                    <p>Ocorrências de caracteres: ${JSON.stringify(data.ocorrencias_caracteres)}</p>
+                `;
+            } catch (error) {
+                console.error('Erro ao enviar requisição:', error);
+            }
+        });
+    </script>
+</body>
+</html>
